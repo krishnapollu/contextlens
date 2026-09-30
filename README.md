@@ -1,47 +1,52 @@
-# DOM2AI UI Capture — V0.1
+# ContextLens
 
-DOM2AI is a local Manifest V3 Chrome extension that turns the current web UI into compact, AI-friendly semantic snapshots. It is intended to give Copilot, Codex, Claude, Gemini, or a human tester enough context to write locators and automation without first setting up Playwright.
+ContextLens is a local Chrome extension that captures the current state of a web application and turns it into compact context for AI coding agents and test automation.
 
-## Install
+It helps Codex, GitHub Copilot, Claude, Gemini, and similar tools understand a screen without requiring a Playwright setup first.
 
-1. Open `chrome://extensions`.
+## How it works
+
+1. Open a web application in Chrome.
+2. Click the ContextLens toolbar icon.
+3. A dedicated capture window opens and stays available while you work in the source tab.
+4. Open the UI state you want to describe: a page, modal, dropdown, drawer, autocomplete list, validation error, or confirmation dialog.
+5. Click **Capture**.
+6. ContextLens extracts the semantic UI and captures a visual reference.
+7. Copy or export the snapshot as Markdown or JSON, and optionally copy or download the screenshot.
+
+Each new capture replaces the previous capture for the current tab, making it easy to recapture the latest state.
+
+## Features
+
+- Page URL, title, origin, timestamp, and viewport metadata
+- Headings and meaningful UI sections
+- Buttons, links, inputs, selects, tabs, checkboxes, radios, and menus
+- Labels, roles, accessible names, and useful attributes
+- Locator hints using IDs, names, test IDs, and roles
+- Dialogs, overlays, drawers, and their controls
+- Tables and visible validation errors
+- Screenshot preview, clipboard copy, and PNG download
+- Markdown and structured JSON export
+- Sensitive-value redaction by default
+
+The output can be pasted directly into an AI coding assistant for locator creation, test cases, automation steps, or UI analysis.
+
+## Output formats
+
+Markdown is readable context for humans and AI agents. JSON is structured snapshot data for tooling and programmatic processing. Screenshot data is kept separate and is not embedded as Base64 in Markdown or JSON exports.
+
+## Privacy
+
+ContextLens processes data locally in the browser. It uses no API key, backend, database, login, analytics, or external server.
+
+Password fields, hidden fields, payment fields, and values associated with names such as password, secret, token, SSN, or card are redacted by default.
+
+## Installation
+
+1. Open `chrome://extensions` in Chrome.
 2. Enable **Developer mode**.
-3. Choose **Load unpacked** and select this `dom2ai-v0.1` folder.
-4. Open or reload a normal web page. A draggable **📸 Capture** button appears at bottom-right.
+3. Select **Load unpacked**.
+4. Choose the folder containing `manifest.json`.
+5. Open or reload the web application you want to inspect.
 
-Click the toolbar icon to open a dedicated DOM2AI window. It stays open while you interact with the source tab, so clicking outside does not dismiss it. Click Capture after each meaningful UI state: base screen, expanded panel, dropdown, autocomplete results, validation message, modal, drawer, or confirmation dialog. Captures accumulate for the source tab. Use the DOM2AI window to preview, copy, download Markdown/JSON, download a screenshot, or clear the session. `Ctrl+Shift+Y` / `Cmd+Shift+Y` captures from the keyboard.
-
-## Architecture
-
-- `src/content/content.js`: Shadow DOM floating control, additive capture session, keyboard-message bridge.
-- `src/content/extractor.js`: visibility-aware semantic extraction of controls, landmarks, forms, dialogs, tables, and validation.
-- `src/content/snapshot-builder.js`: stable schema wrapper and Markdown renderer.
-- `src/background/service-worker.js`: tab-scoped storage and command routing. Content scripts run in eligible popup tabs automatically because Chrome matches every normal web tab/window.
-- `src/popup/*`: preview, copy, download, clear/reset.
-- `src/shared/schema.js`: shared constants and privacy helpers.
-
-## Snapshot example
-
-```markdown
-# UI Snapshot 2
-- URL: https://example.test/orders/42
-- Title: Order 42
-## Dialogs and overlays
-### 1. Confirm shipment
-- Role: dialog
-- Locator hints: `role=dialog[name="Confirm shipment"]`
-```
-
-JSON contains the same metadata plus structured `page.landmarks`, `controls`, `dialogs`, `tables`, and `validation` arrays. Each interactive element includes its accessible name, role, useful attributes, state, and locator candidate hints.
-
-## Permissions and privacy
-
-`<all_urls>` is needed to inject the capture control into arbitrary application pages and app-opened popup tabs. `storage` keeps snapshots local to the browser profile; `downloads` exports a file; `tabs` identifies the active tab. No network requests, API keys, backend, database, analytics, or login are used. Password-like fields, hidden fields, payment fields, and names containing password/secret/token/SSN/card are redacted by default.
-
-## Limitations and roadmap
-
-V0.1 intentionally captures the top document only. Cross-origin iframes, browser chrome, extension pages, closed shadow roots, canvas-only UIs, and native OS dialogs are not inspectable from a normal content script. Open shadow roots and app-specific iframe support can be added with targeted frame messaging. Future work: richer DOM hierarchy, configurable redaction, selector confidence scoring, screenshot association, import/export sessions, and optional integrations with test runners or AI providers.
-
-## Validation
-
-The project is plain JavaScript with no build step. Validate by loading it unpacked, opening a test page, exercising a modal/dropdown/form state, and checking both popup formats. A ZIP distribution is provided alongside this folder.
+ContextLens works on normal web pages and app-opened web popup windows. Browser chrome, `chrome://` pages, native OS dialogs, cross-origin iframe internals, closed shadow roots, and canvas-only UI are outside the browser extension security boundary.
