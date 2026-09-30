@@ -1,0 +1,9 @@
+const key = tabId => `snapshots:${tabId}`;
+chrome.runtime.onInstalled.addListener(()=>chrome.storage.local.set({activeTabId:null}));
+let captureWindowId = null;
+chrome.action.onClicked.addListener(async tab=>{if(!tab?.id)return; const url=`${chrome.runtime.getURL("src/popup/popup.html")}?tabId=${tab.id}&sourceWindowId=${tab.windowId}`; if(captureWindowId){try{await chrome.windows.update(captureWindowId,{focused:true});return;}catch{captureWindowId=null;}} const win=await chrome.windows.create({url,type:"popup",width:430,height:820,focused:true}); captureWindowId=win.id;});
+chrome.windows.onRemoved.addListener(id=>{if(id===captureWindowId)captureWindowId=null;});
+chrome.commands.onCommand.addListener(async command=>{if(command!=="capture-ui")return; const [tab]=await chrome.tabs.query({active:true,lastFocusedWindow:true}); if(tab?.id) chrome.tabs.sendMessage(tab.id,{type:"CAPTURE"}).catch(()=>{});});
+const safeName = value => String(value || "page").replace(/^https?:\/\//, "").replace(/[^a-z0-9._-]+/gi, "-").replace(/^-|-$/g, "").slice(0, 70) || "page";
+chrome.runtime.onMessage.addListener((m,s,sendResponse)=>{if(!s.tab?.id)return; if(m.type==="SNAPSHOT_ADDED"){const snapshots=m.snapshots; chrome.tabs.captureVisibleTab(s.tab.windowId,{format:"png"}).then(dataUrl=>{const current={...snapshots.at(-1),screenshot:dataUrl}; const updated=[...snapshots.slice(0,-1),current]; return chrome.storage.local.set({[key(s.tab.id)]:updated,lastSnapshots:updated,lastSnapshotUrl:s.tab.url,activeTabId:s.tab.id});}).then(()=>sendResponse({ok:true})).catch(()=>chrome.storage.local.set({[key(s.tab.id)]:snapshots,lastSnapshots:snapshots,lastSnapshotUrl:s.tab.url}).then(()=>sendResponse({ok:true})));} if(m.type==="CONTENT_READY") chrome.storage.local.set({activeTabId:s.tab.id}).then(()=>sendResponse({ok:true})); return true;});
+chrome.tabs.onRemoved.addListener(id=>chrome.storage.local.remove(key(id)));

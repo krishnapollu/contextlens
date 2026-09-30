@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "ContextLens — AI UI Capture",
+  "version": "0.1.0",
+  "description": "Capture semantic UI context for AI coding agents and test automation.",
+  "permissions": ["storage", "downloads", "tabs", "activeTab"],
+  "host_permissions": ["<all_urls>"],
+  "background": {"service_worker": "src/background/service-worker.js", "type": "module"},
+  "action": {"default_title": "Open ContextLens"},
+  "commands": {"capture-ui": {"suggested_key": {"default": "Ctrl+Shift+Y", "mac": "MacCtrl+Shift+Y"}, "description": "Capture current UI state"}},
+  "content_scripts": [{"matches": ["<all_urls>"], "js": ["src/content/content.js"], "run_at": "document_idle", "all_frames": false}],
+  "web_accessible_resources": [{"resources": ["src/content/floating.css"], "matches": ["<all_urls>"]}]
+}
