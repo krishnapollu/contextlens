@@ -1,4 +1,4 @@
-const VERSION = "dom2ai.snapshot.v0.1";
+const VERSION = "contextlens.snapshot.v2.1";
 const SENSITIVE_TYPES = new Set(["password", "hidden"]);
 const INTERACTIVE = "a,button,input,select,textarea,summary,option,[contenteditable='true'],[role='button'],[role='link'],[role='checkbox'],[role='radio'],[role='switch'],[role='tab'],[role='menuitem'],[role='menuitemcheckbox'],[role='menuitemradio'],[role='combobox'],[role='option'],[role='listbox'],[role='gridcell'],[role='treeitem'],[role='spinbutton'],[role='slider'],[role='searchbox'],[role='textbox']";
 const cleanText = (value, max = 240) => String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
@@ -24,5 +24,5 @@ function extractSnapshot() { const allSections=sections(document); return {metad
 const buildSnapshot = (capture, sequence) => ({schema: VERSION, sequence, ...capture});
 let snapshots = [];
 function capture(){const s=buildSnapshot(extractSnapshot(),1);snapshots=[s];chrome.runtime.sendMessage({type:"SNAPSHOT_ADDED",snapshot:s,snapshots});}
-chrome.runtime.onMessage.addListener((m, sender, sendResponse)=>{if(m.type==="CAPTURE"){capture();sendResponse({ok:true});} if(m.type==="CLEAR"){snapshots=[];sendResponse({ok:true});} return true;});
+chrome.runtime.onMessage.addListener((m, sender, sendResponse)=>{if(m.type==="CAPTURE"||m.type==="CAPTURE_V2"){capture();sendResponse({ok:true});} if(m.type==="CLEAR"){snapshots=[];sendResponse({ok:true});} return true;});
 chrome.runtime.sendMessage({type:"CONTENT_READY"});
