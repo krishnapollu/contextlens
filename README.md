@@ -9,6 +9,16 @@
 
 **ContextLens is an early-stage, local-first Chrome extension for developers who want to give AI assistants the right UI context quickly.**
 
+## Product preview
+
+### Ready to capture
+
+![ContextLens empty capture window](assets/contextlens-empty.png)
+
+### Captured UI context
+
+![ContextLens captured UI context](assets/contextlens-captured.png)
+
 ContextLens is a local Chrome extension that captures the current state of a web application and turns it into compact context for AI coding agents and test automation.
 
 It helps Codex, GitHub Copilot, Claude, Gemini, and similar tools understand a screen without requiring a Playwright setup first.
