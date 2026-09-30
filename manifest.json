@@ -3,7 +3,7 @@
   "name": "ContextLens — AI UI Capture",
   "version": "2.0.0",
   "description": "Capture semantic UI context for AI coding agents and test automation.",
-  "permissions": ["storage", "downloads", "tabs", "activeTab"],
+  "permissions": ["storage", "downloads", "tabs", "activeTab", "scripting"],
   "host_permissions": ["<all_urls>"],
   "background": {"service_worker": "src/background/service-worker.js", "type": "module"},
   "action": {"default_title": "Open ContextLens"},
