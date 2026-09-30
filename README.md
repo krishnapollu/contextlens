@@ -13,11 +13,10 @@
 
 ### Ready to capture
 
-![ContextLens empty capture window](assets/contextlens-empty.png)
-
-### Captured UI context
-
-![ContextLens captured UI context](assets/contextlens-captured.png)
+<p>
+  <img src="assets/contextlens-empty.png" alt="ContextLens empty capture window" width="320">
+  <img src="assets/contextlens-captured.png" alt="ContextLens captured UI context" width="320">
+</p>
 
 ContextLens is a local Chrome extension that captures the current state of a web application and turns it into compact context for AI coding agents and test automation.
 
