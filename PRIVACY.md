@@ -8,4 +8,4 @@ Sensitive input values are redacted by default, including password, hidden, paym
 
 The extension requests access to web pages because semantic capture, same-origin frame inspection, locator generation, and screenshot capture require access to the selected page. Browser-internal pages, native dialogs, cross-origin frame internals, closed shadow roots, and canvas-only content are not captured.
 
-Contact: publish a project-specific contact address here before public release.
+Contact: krishnapollu@gmail.com
