@@ -45,7 +45,7 @@ Each new capture replaces the previous capture for the current tab, making it ea
 - Tables and visible validation errors
 - Screenshot preview, clipboard copy, and PNG download
 - Markdown and structured JSON export
-- Sensitive-value redaction by default
+- Common sensitive-value redaction by default, with user review recommended before sharing
 
 The output can be pasted directly into an AI coding assistant for locator creation, test cases, automation steps, or UI analysis.
 
@@ -57,7 +57,7 @@ Markdown is readable context for humans and AI agents. JSON is structured snapsh
 
 ContextLens processes data locally in the browser. It uses no API key, backend, database, login, analytics, or external server.
 
-Password fields, hidden fields, payment fields, and values associated with names such as password, secret, token, SSN, or card are redacted by default.
+Common password, hidden, payment, secret, token, SSN, and card-related fields are redacted by default using their standard types, names, labels, autocomplete hints, and related attributes. Application-specific secrets may not be recognized, so review snapshots before sharing them.
 
 ## Installation
 
